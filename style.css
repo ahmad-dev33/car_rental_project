@@ -108,6 +108,16 @@ label {
     width: 320px;
 }
 
+.date-select {
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 15px;
+    color: #333333;
+    background-color: #ffffff;
+    border: 1px solid #b8cfe3;
+    padding: 7px;
+    margin-left: 5px;
+}
+
 .button {
     font-family: Tahoma, Arial, sans-serif;
     font-size: 15px;
