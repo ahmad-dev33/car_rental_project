@@ -35,36 +35,22 @@ function isArabic(text) {
     return text.search(/^[\u0621-\u064A ]+$/) != -1;
 }
 
-// التحقق من التاريخ وإرجاع كائن Date
-function checkDate(text) {
-    var yearText;
-    var monthText;
-    var dayText;
-    var year;
-    var month;
+// تكوين التاريخ من اليوم والشهر والسنة
+function makeDate(dayText, monthText, yearText) {
     var day;
+    var month;
+    var year;
     var date;
 
-    if (text.length != 10) {
-        return null;
-    }
-    if (text.charAt(4) != "-" || text.charAt(7) != "-") {
+    if (dayText == "" || monthText == "" || yearText == "") {
         return null;
     }
 
-    yearText = text.substring(0, 4);
-    monthText = text.substring(5, 7);
-    dayText = text.substring(8, 10);
-
-    if (!isNumber(yearText) || !isNumber(monthText) || !isNumber(dayText)) {
-        return null;
-    }
-
-    year = parseInt(yearText, 10);
-    month = parseInt(monthText, 10);
     day = parseInt(dayText, 10);
+    month = parseInt(monthText, 10);
+    year = parseInt(yearText, 10);
 
-    if (isNaN(year) || isNaN(month) || isNaN(day)) {
+    if (isNaN(day) || isNaN(month) || isNaN(year)) {
         return null;
     }
 
@@ -119,8 +105,12 @@ function checkBooking() {
     var errors = "";
     var name;
     var id;
-    var startText;
-    var endText;
+    var startDayText;
+    var startMonthText;
+    var startYearText;
+    var endDayText;
+    var endMonthText;
+    var endYearText;
     var mobile;
     var email;
     var startDate = null;
@@ -150,8 +140,12 @@ function checkBooking() {
 
     name = removeSpaces(document.getElementById("fullName").value);
     id = removeSpaces(document.getElementById("nationalId").value);
-    startText = removeSpaces(document.getElementById("startDate").value);
-    endText = removeSpaces(document.getElementById("endDate").value);
+    startDayText = removeSpaces(document.getElementById("startDay").value);
+    startMonthText = removeSpaces(document.getElementById("startMonth").value);
+    startYearText = removeSpaces(document.getElementById("startYear").value);
+    endDayText = removeSpaces(document.getElementById("endDay").value);
+    endMonthText = removeSpaces(document.getElementById("endMonth").value);
+    endYearText = removeSpaces(document.getElementById("endYear").value);
     mobile = removeSpaces(document.getElementById("mobile").value);
     email = removeSpaces(document.getElementById("email").value);
 
@@ -173,23 +167,15 @@ function checkBooking() {
     }
 
     // تاريخ البداية
-    if (startText == "") {
-        errors += "- تاريخ بداية التأجير حقل إلزامي.\n";
-    } else {
-        startDate = checkDate(startText);
-        if (startDate == null) {
-            errors += "- تاريخ البداية يجب أن يكون بالصيغة yyyy-mm-dd وتاريخاً صحيحاً.\n";
-        }
+    startDate = makeDate(startDayText, startMonthText, startYearText);
+    if (startDate == null) {
+        errors += "- يرجى اختيار تاريخ بداية التأجير كاملاً وصحيحاً.\n";
     }
 
     // تاريخ النهاية
-    if (endText == "") {
-        errors += "- تاريخ نهاية التأجير حقل إلزامي.\n";
-    } else {
-        endDate = checkDate(endText);
-        if (endDate == null) {
-            errors += "- تاريخ النهاية يجب أن يكون بالصيغة yyyy-mm-dd وتاريخاً صحيحاً.\n";
-        }
+    endDate = makeDate(endDayText, endMonthText, endYearText);
+    if (endDate == null) {
+        errors += "- يرجى اختيار تاريخ نهاية التأجير كاملاً وصحيحاً.\n";
     }
 
     if (startDate != null && endDate != null) {
